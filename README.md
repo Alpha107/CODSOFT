@@ -1,101 +1,54 @@
-# Data Science Internship Projects - CodSoft Virtual Internship
+<h1 align="center">🎓 CodSoft Data Science Internship</h1>
 
-Welcome to the comprehensive repository of projects completed during the Data Science virtual internship at CodSoft! This repository showcases the work done during the 4-week internship from December 15, 2024, to January 15, 2025. As part of this internship, we worked on real-world data science problems, applying machine learning and deep learning techniques to solve them.
+<p align="center">Three projects from a 4-week virtual internship (Dec 2024 – Jan 2025): sales regression, Titanic classification and credit-card fraud detection.</p>
 
-## Projects Overview
+<p align="center">
+  <img src="https://img.shields.io/badge/ML-scikit--learn-f7931e" alt="sklearn">
+  <img src="https://img.shields.io/badge/DL-PyTorch-ee4c2c" alt="PyTorch">
+  <img src="https://img.shields.io/badge/imbalance-SMOTE-6a5acd" alt="SMOTE">
+  <img src="https://img.shields.io/badge/projects-3-blue" alt="3 projects">
+</p>
 
-### 1. **Sales Prediction Using Regression Models**
-This project focuses on predicting sales based on various advertising channels (TV, Radio, and Newspaper) using machine learning algorithms. The goal was to build a model that predicts sales values based on historical data, providing insights into the effectiveness of advertising spend across different media channels.
+## Projects
 
-**Key Components:**
-- **Data Cleaning:** The dataset is preprocessed to remove duplicates, handle missing values, and eliminate outliers.
+| | Notebook | Task | Models | Result |
+|---|---|---|---|---|
+| 📊 | [`SalesPrediction.ipynb`](SalesPrediction.ipynb) | Sales from TV / radio / newspaper ad spend (200 rows) | Random Forest (tuned) · Gradient Boosting · Linear + polynomial features | **R² 0.96** · MAE 0.84 · MSE 1.14 |
+| 🚢 | [`titanic_survival_pred.ipynb`](titanic_survival_pred.ipynb) | Survived or not | Random Forest + GridSearchCV, `FamilySize` feature | Not saved (notebook has no outputs) |
+| 💳 | [`CreditCardFraudDetection.ipynb`](CreditCardFraudDetection.ipynb) | Fraud in 284 807 transactions (≈0.17 % fraud) | PyTorch MLP 128 → 64 → 1 + SMOTE | 1.00 reported, but see the issues below |
 
-- **Exploratory Data Analysis (EDA):** Correlation heatmaps, scatter plots, and pair plots were created to visualize relationships between features and the target variable (Sales).
+## Pipelines
 
-- **Feature Engineering:** Polynomial features were added to improve the model's ability to capture non-linear relationships.
+```mermaid
+flowchart LR
+    subgraph Sales
+      S1["Clean · outliers"] --> S2["Polynomial features"] --> S3["RF / GB / LR"] --> S4["joblib .pkl"]
+    end
+    subgraph Fraud
+      F1["StandardScaler"] --> F2["SMOTE"] --> F3["80 / 20 split"] --> F4["MLP · BCE · Adam"] --> F5["ROC-AUC"]
+    end
+```
 
-- **Modeling:** We used several regression models such as Random Forest Regressor, Gradient Boosting Regressor, and Linear Regression. Hyperparameter tuning was performed for the Random Forest model.
+## Run it
 
-- **Evaluation:** The model's performance was evaluated using metrics like Mean Squared Error (MSE), R-squared (R²), and Mean Absolute Error (MAE).
+```bash
+pip install numpy pandas scikit-learn seaborn matplotlib joblib imbalanced-learn torch
+jupyter notebook
+```
 
-- **Model Deployment:** The best-performing model was saved using `joblib` for future use.
+The datasets are the public Kaggle ones (Advertising, Titanic, Credit Card Fraud 2013). Download them and fix the `F:\CodSoft\...` paths.
 
-**Technologies Used:**
-- Python (pandas, numpy, scikit-learn, matplotlib, seaborn)
+## Status & known issues
 
-- Random Forest Regressor, Gradient Boosting Regressor, Linear Regression
+| Issue | Effect |
+|---|---|
+| **Fraud: SMOTE runs before the train/test split** | Synthetic frauds made from the same originals land in both sets, and the test set is 50 / 50 instead of 0.17 % fraud. The perfect 1.00 precision, recall and AUC are leakage, not real performance |
+| Titanic notebook was never run | No accuracy to report |
+| Datasets not in the repo; paths are hard-coded to `F:\` | Edit before running |
+| Sales data has only 200 rows | R² 0.96 on 40 test rows is noisy; use cross-validation |
 
-### 2. **Titanic Survival Prediction**
-This project involved predicting whether a passenger survived the Titanic disaster based on features such as age, sex, passenger class, fare, and embarkation port. The goal was to use classification models to predict survival and analyze feature importance.
+## Roadmap
 
-**Key Components:**
-- **Data Preprocessing:** Missing values were handled using imputation for age and mode imputation for embarkation port. Categorical variables like sex and embarkation port were encoded using Label Encoding.
-
-- **Feature Engineering:** A new feature, "FamilySize," was created by combining SibSp and Parch columns.
-
-- **Modeling:** We used the Random Forest Classifier and performed hyperparameter tuning to find the best model.
-
-- **Evaluation:** The model was evaluated using metrics such as accuracy, confusion matrix, classification report, and ROC-AUC score.
-
-- **Model Deployment:** The best model was saved for future predictions.
-
-**Technologies Used:**
-- Python (pandas, numpy, scikit-learn, matplotlib, seaborn)
-
-- Random Forest Classifier
-
-### 3. **Credit Card Fraud Detection Using Neural Networks**
-This project aimed to detect fraudulent credit card transactions using a deep learning model. The dataset contained highly imbalanced classes (fraud vs. non-fraud), and techniques like SMOTE (Synthetic Minority Over-sampling Technique) were used to balance the data.
-
-**Key Components:**
-- **Data Preprocessing:** The dataset was scaled using StandardScaler, and class imbalance was handled using SMOTE.
-
-- **Modeling:** A simple feed-forward neural network was built using PyTorch. The model architecture consisted of three fully connected layers with ReLU activations and a sigmoid output layer.
-
-- **Training:** The model was trained using the Adam optimizer and Binary Cross-Entropy loss function.
-
-- **Evaluation:** The model's performance was evaluated using metrics like confusion matrix, classification report, ROC-AUC score, and ROC curve.
-
-- **Model Deployment:** The trained model was saved using PyTorch for future use.
-
-**Technologies Used:**
-- Python (pandas, numpy, scikit-learn, matplotlib, seaborn, imbalanced-learn)
-
-- PyTorch (neural networks, training, evaluation)
-
----
-
-## Internship Experience
-
-During the 4-week virtual internship at **CodSoft**, I had the opportunity to work on real-world data science problems. The internship provided a platform to apply theoretical knowledge in machine learning and deep learning, gaining hands-on experience in:
-
-- **Data Preprocessing:** Cleaning, transforming, and handling missing or imbalanced data.
-
-- **Modeling:** Building and fine-tuning various machine learning and deep learning models.
-
-- **Evaluation:** Evaluating model performance using appropriate metrics and visualizations.
-
-- **Deployment:** Saving models for future predictions and use in real-world applications.
-
-### Skills Developed
-- **Machine Learning:** Regression, Classification, Model Evaluation, Hyperparameter Tuning
-
-- **Deep Learning:** Neural Networks, PyTorch
-
-- **Data Analysis & Visualization:** Exploratory Data Analysis (EDA), Data Preprocessing, Visualizations
-
-- **Tools & Libraries:** Python, pandas, numpy, scikit-learn, matplotlib, seaborn, PyTorch, SMOTE, joblib
-
----
-
-## Acknowledgements
-
-I would like to extend my sincere gratitude to **CodSoft** for providing this valuable learning opportunity. The internship has been an incredible journey of growth and learning, allowing me to work on real-world projects and gain practical experience in data science and machine learning.
-
----
-
-## Conclusion
-
-This repository serves as a collection of my work during the **Data Science** virtual internship at **CodSoft**. It showcases the application of various machine learning and deep learning techniques to solve real-world problems, from predicting sales and survival outcomes to detecting credit card fraud. I hope this work serves as a useful resource for those interested in learning more about data science, machine learning, and deep learning.
-
-Feel free to explore the code, run the models, and adapt them for your own projects. Happy coding!
+- [ ] Fraud: split first, SMOTE on train only, report PR-AUC on the real class ratio
+- [ ] Run and save the Titanic notebook
+- [ ] `data/` download script and relative paths
